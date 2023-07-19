@@ -1,6 +1,5 @@
 #![allow(unused)]
 use clap::Parser;
-use console::strip_ansi_codes;
 use console::style;
 use std::fs::File;
 use std::io::prelude::*;
@@ -19,7 +18,6 @@ fn some_kind_of_uppercase_first_letter(s: &str) -> String {
     }
 }
 
-
 fn main() {
     let args = Cli::parse();
     let file = File::open(&args.path);
@@ -34,26 +32,29 @@ fn main() {
         let mut buffer: String = String::new();
 
         content.read_to_string(&mut buffer).unwrap();
+
         let mut lines = buffer.lines();
         let mut line = lines.next();
         let to_lower_case = args.pattern.as_str().to_lowercase();
         let to_upper_case = some_kind_of_uppercase_first_letter(&args.pattern);
         while line != None {
             // incluir también palabras que contengan el patron incluso si están capitalizadas
-            let str_count = style(count.to_string()).cyan().bold().to_string();
+            let str_count = style(count).cyan().bold().to_string();
             if line.as_ref().unwrap().contains(&to_lower_case) {
                 println!(
                     "{str_count}: {}",
-                    line.unwrap().replace(
+                    line.unwrap().trim().replace(
                         &to_lower_case,
-                        &style(&to_lower_case).green().bold().to_string()
+                        &style(&to_lower_case.trim()).green().bold().to_string()
                     )
                 );
             } else if line.as_ref().unwrap().contains(&to_upper_case) {
                 println!(
                     "{str_count}: {}",
-                    line.unwrap()
-                        .replace(&to_upper_case, &style(&to_upper_case).red().bold().to_string())
+                    line.unwrap().trim().replace(
+                        &to_upper_case,
+                        &style(&to_upper_case.trim()).red().bold().to_string().trim()
+                    )
                 );
             }
             line = lines.next();
