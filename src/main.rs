@@ -56,7 +56,7 @@ fn main() {
         }
 
         if colored_line != line {
-            println!("{str_count}: {colored_line}", str_count = str_count, colored_line = colored_line);
+            println!("{str_count}: {colored_line}", str_count = str_count, colored_line = colored_line.trim());
         }
         count += 1;
     }
