@@ -12,9 +12,6 @@ struct Cli {
 
     #[clap(short, long)]
     insensitive: bool,
-
-    #[clap(short, long)]
-    exact: bool,
 }
 
 fn main() {
@@ -43,7 +40,7 @@ fn main() {
 
         for captures in regex.captures_iter(&line) {
             let pattern_match = captures.get(0).unwrap().as_str();
-            let colored_pattern = if args.exact && line == pattern_match {
+            let colored_pattern = if line == pattern_match {
                 style(pattern_match).blue().bold()
             } else if args.insensitive && line.to_lowercase() == pattern_match.to_lowercase() {
                 style(pattern_match).green().bold()
